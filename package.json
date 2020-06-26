@@ -10,7 +10,9 @@
     "serve": "nuxt serve"
   },
   "dependencies": {
-    "nuxt": "^2.13.0"
+    "nuxt": "^2.13.0",
+    "stickyfilljs": "^2.1.0",
+    "vue-google-charts": "^0.3.3"
   },
   "devDependencies": {}
 }

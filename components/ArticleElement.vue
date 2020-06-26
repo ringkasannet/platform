@@ -33,7 +33,7 @@ export default {
       let options = {
         root: this.parentRef,
         rootMargin: "0px 0px -90% 0px",
-        threshold: [0,0.2]
+        threshold: [0,0.1]
       };
       console.log(this.parentRef);
       let callback = (changes, observer) => {

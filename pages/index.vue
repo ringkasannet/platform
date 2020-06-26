@@ -1,5 +1,9 @@
 <template>
   <div class="main-container">
+    <div id="demo">
+    </div>
+<!-- <div class="anim"></div> -->
+
     <div class="app-title">
       <h4>Ringkasan</h4>
     </div>
@@ -50,7 +54,8 @@ export default {
       img: "/covid.jpg",
       intersectionObserver: {},
       titles: ["a", "b", "c"],
-      elementContainer: {}
+      elementContainer: {},
+      show:true
     };
   },
   mounted: function() {
@@ -98,6 +103,10 @@ export default {
       let height = window.innerHeight - ref.getBoundingClientRect().top + "px";
       console.log(height);
       ref.style.height = height;
+    },
+    fadeChange(){
+      this.$refs.fadeitem.textContent="Halo berubah"
+      console.log(this.$refs.fadeitem.textContent)
     }
   }
 };
@@ -112,20 +121,30 @@ export default {
   .chart {
     width: 100%;
   }
+  .chart-container{
+    /* animation-name: example;
+    height:500px;
+    background-color: red; */
+  }
   .content-container {
     display: flex;
     flex-direction: column;
   }
   .element-container {
-    height: 400px;
+    /* height: 400px; */
     overflow: scroll;
   }
-  .fade-enter-active,
-  .fade-leave-active {
-    transition: opacity 0.5s;
-  }
-  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-    opacity: 0;
-  }
+  
+.anim {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  animation-name: example;
+  animation-duration: 4s;
+}
+@keyframes example {
+  from {background-color: red;}
+  to {background-color: yellow;}
+}
 }
 </style>
