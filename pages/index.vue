@@ -12,16 +12,16 @@
       <div>
         <div class="element-container" ref="elementContainer">
           <!-- <div v-for="title in titles" :key="title" ref="elementArray" style="height:50px">{{title}}</div> -->
-          <Element
+          <ArticleElement
             v-bind:parentRef="elementContainer"
             title="coba judul"
             v-on:activated="onActivated"
-          ></Element>
-          <Element
+          ></ArticleElement>
+          <ArticleElement
             v-bind:parentRef="elementContainer"
             title="coba judul2"
             v-on:activated="onActivated"
-          ></Element>
+          ></ArticleElement>
 
           <div>
             Bawah
@@ -42,9 +42,9 @@
 </template>
 
 <script>
-import Element from "~/components/ArticleElement.Vue";
+// import Element from "~/components/ArticleElement.Vue";
 export default {
-  components: { Element },
+  // components: { Element },
   data: function() {
     return {
       img: "/covid.jpg",
