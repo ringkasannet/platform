@@ -1,0 +1,13 @@
+query articlesQuery ($slug:String) {
+    articles(where: {slug:$slug}){
+      slug
+    	articleTitle
+      paras{
+        paraText
+        paraImage{
+          url
+        }
+      }
+      
+    }
+  }

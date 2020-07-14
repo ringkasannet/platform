@@ -1,0 +1,11 @@
+query categories
+{
+  categories {
+    name
+    articles {
+      id
+      articleTitle
+      slug
+    }
+  }
+} # Write your query or mutation here
