@@ -1,36 +1,36 @@
 <template>
   <div>
     <div v-if="article" class="contentContainer">
-      {{chartShown}}{{chartLoaded}}
       <div class="judulContainer">
         <h2>Ringkasan</h2>
       </div>
-
-      <div class="chartContainer">
-        <div
-          ref="chartElement"
-          class="chartElement"
-          v-for="(para,index) in article.paras"
-          v-bind:key="index"
-        >
-          <Chart
-            v-if="chartLoaded[index]"
-            v-show="chartShown[index]"
-            class="chart"
-            :chartUrl="para.paraChart.url"
-          />
+      <div class="articleContainer">
+        <div class="chartContainer">
+          <div
+            ref="chartElement"
+            class="chartElement"
+            v-for="(para,index) in article.paras"
+            v-bind:key="index"
+          >
+            <Chart
+              v-if="chartLoaded[index]"
+              v-show="chartShown[index]"
+              class="chart"
+              :chartUrl="para.paraChart.url"
+            />
+          </div>
         </div>
-      </div>
 
-      <div ref="paraContainer" class="paraContainer">
-        <div
-          ref="paraElement"
-          class="paraElement"
-          v-for="(para,index) in article.paras"
-          v-bind:key="index"
-          :class="{lastPara:index===(article.paras.length-1)}"
-        >
-          <para :para="para.paraText"></para>
+        <div ref="paraContainer" class="paraContainer">
+          <div
+            ref="paraElement"
+            class="paraElement"
+            v-for="(para,index) in article.paras"
+            v-bind:key="index"
+            :class="{lastPara:index===(article.paras.length-1)}"
+          >
+            <para :para="para.paraText"></para>
+          </div>
         </div>
       </div>
     </div>
@@ -64,9 +64,7 @@ export default {
   async asyncData(context) {
     let article;
     try {
-      article = await context.$strapi.getStrapiArticle(
-        context.params.slug
-      ); //get article data from strapi plugin
+      article = await context.$strapi.getStrapiArticle(context.params.slug); //get article data from strapi plugin
     } catch (error) {
       return { article: { paras: [] } };
     }
@@ -86,11 +84,11 @@ export default {
         changes.forEach(change => {
           if (change.isIntersecting == false) {
             this.$set(this.chartShown, index, false);
-            console.log(index,false);
+            console.log(index, false);
           } else if (change.isIntersecting == true) {
             this.$set(this.chartShown, index, true);
             this.$set(this.chartLoaded, index, true);
-            console.log(index,true);
+            console.log(index, true);
           }
           // console.log(this.chartShown)
         });
@@ -111,6 +109,14 @@ export default {
   height: 100%;
   width: 100%;
   /* max-width: 600px; */
+}
+.articleContainer {
+  /* position: fixed;
+  top: 0px; */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
 }
 .paraContainer {
   overflow: scroll;
@@ -150,5 +156,60 @@ iframe {
   background-color: black;
   color: white;
   padding: 10px;
+}
+
+@media only screen and (min-width: 600px) {
+  .contentContainer {
+    display: flex;
+    flex-direction: column;
+  }
+  .articleContainer {
+    display: flex;
+    flex-direction: row;
+    height: 80%;
+    margin: 40px;
+    width: auto;
+  }
+  .chartContainer {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  .chartElement {
+    /* position: absolute;
+    left:0px;
+    bottom:0px; */
+    width: 100%;
+    height: 100%;
+  }
+  .chart {
+    height: 100%;
+    /* width:100%; */
+    /* position: absolute;*/
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+  } 
+  .paraContainer {
+    flex: 1;
+  }
+  .lastPara {
+    min-height: 100vh;
+  }
+  img {
+    max-height: 100%;
+    max-width: 100%;
+  }
+  iframe {
+    height: 100%;
+    width: 100%;
+    min-height: 70vh;
+    align-self:stretch;
+  }
+  span{
+    width:100%;
+  }
 }
 </style>
