@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="article" class="contentContainer">
-      {{chartShown}}
+      {{chartShown}}{{chartLoaded}}
       <div class="judulContainer">
         <h2>Ringkasan</h2>
       </div>
@@ -14,7 +14,7 @@
           v-bind:key="index"
         >
           <Chart
-            v-if="chartLoaded"
+            v-if="chartLoaded[index]"
             v-show="chartShown[index]"
             class="chart"
             :chartUrl="para.paraChart.url"
