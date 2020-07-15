@@ -1,16 +1,31 @@
 <template>
   <div>
     <div v-if="article" class="contentContainer">
+      {{chartShown}}
       <div class="judulContainer">
         <h2>Ringkasan</h2>
       </div>
-      <div ref="chartContainer" class="chartContainer">
-        <Chart class="chartElement" :chartUrl="chartUrl" :chartEmbed="chartEmbed"/>
-      </div>
-      <div ref="articleContainer" class="articleContainer">
+
+      <div class="chartContainer">
         <div
-          ref="paraContainer"
-          class="paraContainer"
+          ref="chartElement"
+          class="chartElement"
+          v-for="(para,index) in article.paras"
+          v-bind:key="index"
+        >
+          <Chart
+            v-if="chartLoaded"
+            v-show="chartShown[index]"
+            class="chart"
+            :chartUrl="para.paraChart.url"
+          />
+        </div>
+      </div>
+
+      <div ref="paraContainer" class="paraContainer">
+        <div
+          ref="paraElement"
+          class="paraElement"
           v-for="(para,index) in article.paras"
           v-bind:key="index"
           :class="{lastPara:index===(article.paras.length-1)}"
@@ -28,57 +43,56 @@ export default {
     return {
       article: { paras: [] },
       chartUrl: "init",
-      chartEmbed:false
+      chartEmbed: false,
+      chartShown: [],
+      chartLoaded: []
     };
   },
   mounted() {
     console.log("in mounted");
-    this.article.paras.forEach((para, index) =>
+    this.article.paras.forEach((para, index) => {
+      this.chartShown.push(false);
+      this.chartLoaded.push(false);
       this.setWatcher(
         para,
         index,
-        this.$refs.articleContainer,
-        this.$refs.paraContainer
-      )
-    );
+        this.$refs.paraContainer,
+        this.$refs.paraElement
+      );
+    });
   },
   async asyncData(context) {
     let article;
     try {
-      article = await context.$strapi.getStrapiArticle(context.params.slug); //get article data from strapi plugin
-    } catch (error) {}
+      article = await context.$strapi.getStrapiArticle(
+        context.params.slug
+      ); //get article data from strapi plugin
+    } catch (error) {
+      return { article: { paras: [] } };
+    }
     return { article };
   },
   methods: {
-    setChart(para) {
-      console.log("setting chart",para.paraEmbed)
-      if (para.paraChart && !para.paraEmbed) {
-        console.log('chart found')
-        this.chartEmbed=false
-        this.chartUrl = `http://ringkasan.net:1337${para.paraChart.url}`;
-      }  
-      console.log(para.paraEmbed==true)
-      if (para.paraEmbed) {
-        console.log('embed found',para.paraEmbed)
-        this.chartEmbed=true
-        this.chartUrl = para.paraEmbed;
-      }
-    },
-    setWatcher(para, index, root, paraContainer) {
-      console.log("in setWatcher");
-
-      let ref = paraContainer[index];
+    setWatcher(para, index, root, paraElement) {
+      console.log(this.chartShown);
+      let ref = paraElement[index];
       let options = {
         root: root,
         rootMargin: "-10% 0px -90% 0px",
         threshold: 0
       };
       let callback = (changes, observer) => {
+        console.log("in callback");
         changes.forEach(change => {
-          if (change.isIntersecting == true) {
-            console.log(para)
-            this.setChart(para);
+          if (change.isIntersecting == false) {
+            this.$set(this.chartShown, index, false);
+            console.log(index,false);
+          } else if (change.isIntersecting == true) {
+            this.$set(this.chartShown, index, true);
+            this.$set(this.chartLoaded, index, true);
+            console.log(index,true);
           }
+          // console.log(this.chartShown)
         });
       };
       let observer = new IntersectionObserver(callback, options);
@@ -98,27 +112,36 @@ export default {
   width: 100%;
   /* max-width: 600px; */
 }
-.articleContainer {
+.paraContainer {
   overflow: scroll;
   flex: 1;
 }
-.paraContainer {
+.paraElement {
   margin: 0 20px;
   background-color: white;
 }
+
 .chartContainer {
   flex-basis: 200px;
   text-align: center;
+  justify-content: center;
   background-color: black;
   min-height: 30vh;
+  position: relative;
+}
+.chartElement {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
 }
 img {
   max-height: 30vh;
 }
-iframe{
+iframe {
   min-height: 30vh;
   max-height: 30vh;
-  width:100%;
+  width: 100%;
 }
 .lastPara {
   min-height: 70vh;
