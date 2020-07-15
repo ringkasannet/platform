@@ -1,45 +1,38 @@
 
-
+<template>
+  <div>
+    <span v-html="chartHtml"></span>
+  </div>
+</template>
 <script>
 export default {
-  computed: {
-    dynamicComponent() {
-      return {
-        template: this.chartHtml,
-        props: ["chartUrl"]
-      };
-    }
+  props: ["chartUrl"],
+  mounted() {
+    this.setupChart();
   },
-  props: ["chartEmbed","chartUrl"],
-  watch: {
-    chartUrl(c) {
-      console.log("embed: ",this.chartEmbed,this.chartUrl);
+  methods: {
+    setupChart() {
       let ext = this.chartUrl.split(".").pop();
-      if (!this.chartEmbed){
+      console.log(ext);
       switch (ext) {
         case "jpeg":
         case "jpg": {
-          this.chartHtml = `<div> <img :src="chartUrl" /> </div>`;
+          this.chartHtml = `<img src="http://ringkasan.net:1337${this.chartUrl}" />`;
           break;
         }
-      }} else if (this.chartEmbed){
-        console.log('assigning embed')
-        this.chartHtml = `<div> <span v-html="chartUrl"></span></div>`
+        case "html": {
+          let chartHtml = this.$axios.$get(`http://ringkasan.net:1337${this.chartUrl}`);
+          chartHtml.then(c => {this.chartHtml=c});
+          break;
+        }
       }
       this.$forceUpdate();
     }
   },
   data() {
     return {
-      chartHtml: `<div>init</div>`
+      chartHtml: `<div>init</div>`,
     };
-  },
-  render: function(createElement) {
-    return createElement("div", [
-      createElement(this.dynamicComponent, {
-        props: { chartUrl: this.chartUrl }
-      })
-    ]);
   }
 };
 </script>
