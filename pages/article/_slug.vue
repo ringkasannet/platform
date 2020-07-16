@@ -12,12 +12,14 @@
             v-for="(para,index) in article.paras"
             v-bind:key="index"
           >
-            <Chart
-              v-if="chartLoaded[index]"
-              v-show="chartShown[index]"
-              class="chart"
-              :chartUrl="para.paraChart.url"
-            />
+            <transition name="fade">
+              <Chart
+                v-if="chartLoaded[index]"
+                v-show="chartShown[index]"
+                class="chart"
+                :chartUrl="para.paraChart.url"
+              />
+            </transition>
           </div>
         </div>
 
@@ -29,6 +31,39 @@
             v-bind:key="index"
             :class="{lastPara:index===(article.paras.length-1)}"
           >
+            <div>
+              <svg class="circleElement" width="30" height="30" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                <circle
+                  v-show="chartShown[index]"
+                  cx="20"
+                  cy="20"
+                  fill="none"
+                  r="10"
+                  stroke="red"
+                  stroke-width="2"
+                >
+                  <animate
+                    attributeName="r"
+                    from="5"
+                    to="15"
+                    dur="1.5s"
+                    begin="0s"
+                    repeatCount="indefinite"
+                  />
+                  <animate
+                    attributeName="opacity"
+                    from="1"
+                    to="0"
+                    dur="1.5s"
+                    begin="0s"
+                    repeatCount="indefinite"
+                  />
+                </circle>
+                <circle cx="20" cy="20" fill="grey" r="10" />
+                <circle v-show="chartShown[index]" cx="20" cy="20" fill="red" r="10" />
+              </svg>
+            </div>
+
             <para :para="para.paraText"></para>
           </div>
         </div>
@@ -123,8 +158,14 @@ export default {
   flex: 1;
 }
 .paraElement {
-  margin: 0 20px;
+  margin: 0 20px 5px 0;
   background-color: white;
+  display: flex;
+  flex-direction: row;
+}
+.circleElement {
+  position: sticky;
+  top: 0;
 }
 
 .chartContainer {
@@ -157,8 +198,15 @@ iframe {
   color: white;
   padding: 10px;
 }
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 479px) {
   .contentContainer {
     display: flex;
     flex-direction: column;
@@ -190,8 +238,8 @@ iframe {
     /* position: absolute;*/
     display: flex;
     align-items: center;
-    justify-content: center; 
-  } 
+    justify-content: center;
+  }
   .paraContainer {
     flex: 1;
   }
@@ -206,10 +254,10 @@ iframe {
     height: 100%;
     width: 100%;
     min-height: 70vh;
-    align-self:stretch;
+    align-self: stretch;
   }
-  span{
-    width:100%;
+  span {
+    width: 100%;
   }
 }
 </style>
