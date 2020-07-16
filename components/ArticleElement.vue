@@ -1,6 +1,6 @@
 <template>
   <div ref="elementArea">
-    <h3>{{title}}</h3>
+    <h3>{{ }}</h3>
     <p>{{text}}</p>
     <button v-on:click="alert">Show Parent Ref </button>
   </div>
