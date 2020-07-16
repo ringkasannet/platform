@@ -12,6 +12,9 @@
   background-color: black;
   color: white;
   width: 100%;
+  text-align: center;
+}
+h2{
 }
 a{
     text-decoration: none;
