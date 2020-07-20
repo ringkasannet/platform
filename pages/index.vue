@@ -1,5 +1,7 @@
 <style scoped>
-
+@media screen and (max-width: 470){
+  
+}
 a {
   text-decoration: none;
   color: black;

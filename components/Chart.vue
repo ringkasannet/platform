@@ -21,9 +21,10 @@ export default {
           break;
         }
         case "html": {
-          let chartHtml = this.$axios.$get(`http://ringkasan.net:1337${this.chartUrl}`);
-          chartHtml.then(c => {this.chartHtml=c});
-          break;
+          // let chartHtml = this.$axios.$get(
+          //   `http://ringkasan.net:1337${this.chartUrl}`
+          // );
+            this.chartHtml = `<iframe src="http://ringkasan.net:1337${this.chartUrl}" style="border:none"></iframe>`;          
         }
       }
       this.$forceUpdate();
@@ -31,7 +32,7 @@ export default {
   },
   data() {
     return {
-      chartHtml: `<div>init</div>`,
+      chartHtml: `<div>init</div>`
     };
   }
 };
