@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.0",
-    "gsap": "^3.3.4",
+    "gsap": "^3.6.0",
     "markdown-it": "^11.0.0",
     "nmap": "^1.1.0",
     "nuxt": "^2.13.0",
